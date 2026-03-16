@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Initialize EmailJS
-    // Replace with your actual Public Key from EmailJS dashboard
-    emailjs.init("YOUR_PUBLIC_KEY");
+    // Initialize Web3Forms
+    const WEB3FORMS_ACCESS_KEY = "d6661ac9-1f60-4211-b13c-8b6491e6b460";
 
     // Dynamic Year Update
     const yearSpan = document.getElementById('current-year');
@@ -189,29 +188,44 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Sending...</span>';
             
-            // Service ID, Template ID
-            emailjs.sendForm('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', this)
-                .then(() => {
+            const formData = new FormData(contactForm);
+            formData.append("access_key", WEB3FORMS_ACCESS_KEY);
+            formData.append("subject", "New Contact Form Submission from Neatify");
+            formData.append("from_name", "Neatify Website");
+
+            const object = Object.fromEntries(formData);
+            const json = JSON.stringify(object);
+
+            fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: json
+            })
+            .then(async (response) => {
+                let json = await response.json();
+                if (response.status == 200) {
                     formStatus.innerText = 'Message sent successfully! We will contact you soon.';
                     formStatus.className = 'text-center text-sm font-medium mt-4 text-secondary';
                     contactForm.reset();
-                }, (error) => {
-                    console.error('FAILED...', error);
-                    // For demo purposes, we'll show success if keys aren't set up yet
-                    if (emailjs._getParameter('YOUR_PUBLIC_KEY')) {
-                        formStatus.innerText = 'Service temporarily unavailable. Please try again later or call us.';
-                        formStatus.className = 'text-center text-sm font-medium mt-4 text-red-500';
-                    } else {
-                        formStatus.innerText = 'Message sent! (Demo Mode)';
-                        formStatus.className = 'text-center text-sm font-medium mt-4 text-secondary';
-                        contactForm.reset();
-                    }
-                })
-                .finally(() => {
-                    btn.disabled = false;
-                    btn.innerHTML = originalBtnText;
-                    setTimeout(() => { formStatus.innerText = ''; }, 5000);
-                });
+                } else {
+                    console.log(response);
+                    formStatus.innerText = json.message || 'Something went wrong!';
+                    formStatus.className = 'text-center text-sm font-medium mt-4 text-red-500';
+                }
+            })
+            .catch(error => {
+                console.log(error);
+                formStatus.innerText = 'Service temporarily unavailable. Please try again later.';
+                formStatus.className = 'text-center text-sm font-medium mt-4 text-red-500';
+            })
+            .finally(() => {
+                btn.disabled = false;
+                btn.innerHTML = originalBtnText;
+                setTimeout(() => { formStatus.innerText = ''; }, 5000);
+            });
         });
     }
     // Booking Form Handling (EmailJS)
@@ -235,29 +249,44 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Processing...</span>';
             
-            // Service ID, Template ID (using same as contact form for now or template if different)
-            emailjs.sendForm('YOUR_SERVICE_ID', 'YOUR_BOOKING_TEMPLATE_ID', this)
-                .then(() => {
+            const formData = new FormData(bookingForm);
+            formData.append("access_key", WEB3FORMS_ACCESS_KEY);
+            formData.append("subject", "New Booking Request from Neatify");
+            formData.append("from_name", "Neatify Booking");
+
+            const object = Object.fromEntries(formData);
+            const json = JSON.stringify(object);
+
+            fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: json
+            })
+            .then(async (response) => {
+                let json = await response.json();
+                if (response.status == 200) {
                     bookingStatus.innerText = 'Booking request sent! We will confirm your slot shortly.';
                     bookingStatus.className = 'text-center text-sm font-medium mt-4 text-secondary';
                     bookingForm.reset();
-                }, (error) => {
-                    console.error('BOOKING FAILED...', error);
-                    // For demo purposes, we'll show success if keys aren't set up yet
-                    if (emailjs._getParameter('YOUR_PUBLIC_KEY')) {
-                        bookingStatus.innerText = 'Booking service unavailable. Please call us to book.';
-                        bookingStatus.className = 'text-center text-sm font-medium mt-4 text-red-500';
-                    } else {
-                        bookingStatus.innerText = 'Booking request sent! (Demo Mode)';
-                        bookingStatus.className = 'text-center text-sm font-medium mt-4 text-secondary';
-                        bookingForm.reset();
-                    }
-                })
-                .finally(() => {
-                    btn.disabled = false;
-                    btn.innerHTML = originalBtnText;
-                    setTimeout(() => { bookingStatus.innerText = ''; }, 5000);
-                });
+                } else {
+                    console.log(response);
+                    bookingStatus.innerText = json.message || 'Something went wrong!';
+                    bookingStatus.className = 'text-center text-sm font-medium mt-4 text-red-500';
+                }
+            })
+            .catch(error => {
+                console.log(error);
+                bookingStatus.innerText = 'Booking service unavailable. Please call us to book.';
+                bookingStatus.className = 'text-center text-sm font-medium mt-4 text-red-500';
+            })
+            .finally(() => {
+                btn.disabled = false;
+                btn.innerHTML = originalBtnText;
+                setTimeout(() => { bookingStatus.innerText = ''; }, 5000);
+            });
         });
     }
 
