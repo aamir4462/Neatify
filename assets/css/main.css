@@ -1,0 +1,239 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    
+    --color-primary: #14b8a6;
+    /* --color-primary: #45858f; */
+    --color-secondary: #22c55e;
+    --color-light: #f8fafc;
+    --color-dark: #0f172a;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--color-light);
+    overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Outfit', sans-serif;
+}
+
+.gradient-text {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.gradient-bg {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+}
+section {
+    padding-left: 6rem;
+    padding-right: 6rem;
+}
+.section-padding {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+}
+.btn-primary{
+    background: #45858f ;
+    color: #fff;
+    border: 2px solid #45858f   ;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.btn-primary:hover {
+    background: #fff;
+    color: #45858f  ;
+    border: 2px solid #45858f   ;
+}
+@layer components {
+    .btn-primary {
+        @apply gradient-bg text-white font-bold py-4 px-10 rounded-2xl transition-all duration-500 hover:shadow-[0_20px_40px_rgba(20,184,166,0.3)] active:scale-95 shadow-[0_10px_20px_rgba(20,184,166,0.15)] inline-flex items-center justify-center relative overflow-hidden;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background-size: 200% auto;
+    }
+    
+    .btn-primary::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -150%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.4),
+            transparent
+        );
+        transition: 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    .btn-primary:hover {
+        @apply -translate-y-1;
+        border-color: rgba(255, 255, 255, 0.3);
+        background-position: right center;
+    }
+
+    .btn-primary:hover::after {
+        left: 150%;
+    }
+
+    .btn-primary i {
+        transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .btn-primary:active {
+        box-shadow: 0 5px 10px rgba(20,184,166,0.2);
+    }
+
+    .btn-primary:hover .fa-paper-plane {
+        transform: translate(8px, -8px) scale(1.1);
+    }
+
+    .btn-primary:hover .fa-calendar-check {
+        transform: scale(1.2) rotate(8deg);
+    }
+    .btn-outline {
+        @apply border-2 border-primary text-primary font-bold py-4 px-10 rounded-2xl transition-all duration-300 hover:bg-primary/5 hover:shadow-lg active:scale-95 inline-flex items-center justify-center;
+    }
+    .mobile-nav-link {
+        @apply text-slate-700 hover:text-primary transition-colors py-2 border-b border-slate-100;
+    }
+}
+
+/* Carousel Styles */
+.carousel-slide {
+    pointer-events: none;
+    z-index: 1;
+}
+
+.carousel-slide.active {
+    opacity: 1;
+    pointer-events: auto;
+    z-index: 2;
+}
+
+.carousel-dot.active {
+    @apply bg-primary w-8;
+}
+
+#prev-slide:hover, #next-slide:hover {
+    @apply text-white;
+    background-color: var(--color-primary);
+}
+
+/* Ensure section padding doesn't break carousel for hero */
+#hero.p-0 {
+    padding: 0;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.carousel-slide.active .max-w-3xl {
+    animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-on-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.animate-on-scroll.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Service Cards */
+.service-card {
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.service-card:hover {
+    transform: translateY(-10px);
+}
+
+/* FAQ Accordion */
+.faq-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+}
+
+.faq-item.active .faq-content {
+    max-height: 200px;
+}
+
+.faq-item.active i {
+    transform: rotate(180deg);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 5px;
+    border: 2px solid #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--color-primary);
+}
+@media screen and (max-width: 768px) {
+    section {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+}
+
+/* WhatsApp Widget Styles */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fadeIn {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+#whatsapp-window.show {
+    display: block !important;
+    animation: whatsappOpen 0.3s ease-out forwards;
+}
+
+@keyframes whatsappOpen {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
